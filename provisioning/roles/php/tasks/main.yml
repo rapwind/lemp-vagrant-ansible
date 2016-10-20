@@ -1,0 +1,32 @@
+- name: install packages libmcrypt
+  yum: name={{ item }} state=present enablerepo=epel
+  with_items:
+    - libmcrypt
+    - libmcrypt-devel
+  poll: 30
+  async: 600
+
+- name: install packages php7.0
+  yum: name={{ item }} state=present enablerepo=remi-php70
+  with_items:
+    - php
+    - php-cli
+    - php-common
+    - php-devel
+    - php-xml
+    - php-json
+    - php-mysqli
+    - php-mysqlnd
+    - php-mbstring
+    - php-apcu
+    - php-opcache
+    - php-process
+    - php-gd
+    - php-fpm
+    - php-mcrypt
+  poll: 30
+  async: 600
+
+- name: copy php-fpm configuration
+  copy: src=etc/php-fpm.d/www.conf dest=/etc/php-fpm.d/www.conf
+  notify: restart php-fpm

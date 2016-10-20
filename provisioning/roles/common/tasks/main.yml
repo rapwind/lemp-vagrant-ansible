@@ -1,0 +1,22 @@
+- name: set timezone to Asia/Tokyo
+  file: src=/usr/share/zoneinfo/Asia/Tokyo  dest=/etc/localtime state=link force=yes
+
+- name: install remi repository
+  yum: name="http://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+
+- name: add nginx repository
+  yum: name=http://nginx.org/packages/mainline/rhel/7/x86_64/RPMS/nginx-1.11.3-1.el7.ngx.x86_64.rpm
+
+- name: add mysql repository
+  yum: name=http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+- name: check firewalld is running
+  command: systemctl is-active firewalld
+  register: firewalld_result
+  changed_when: False
+  ignore_errors: True
+
+- name: set the port state
+  firewalld: permanent={{ item }} port=80/tcp state=enabled
+  with_items: [ True, False ]
+  when: firewalld_result.stdout == "active"

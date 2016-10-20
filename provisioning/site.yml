@@ -1,0 +1,10 @@
+---
+- hosts: vagrants
+  become: true
+  user: vagrant
+  force_handlers: true
+  roles:
+    - common
+    - nginx
+    - php
+    - mysql
