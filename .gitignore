@@ -1,4 +1,6 @@
 .vagrant
 *.retry
+vendor/bundle
+.bundle
 html/*
 
